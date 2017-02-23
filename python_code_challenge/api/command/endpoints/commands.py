@@ -9,7 +9,7 @@ from rest_api_demo.database.models import Category
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('commands/command', description='Command Operations')
+ns = api.namespace('commands', description='Command Operations')
 
 
 @ns.route('/')
