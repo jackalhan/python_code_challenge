@@ -3,14 +3,15 @@ Details the various flask endpoints for processing and retrieving
 command details as well as a swagger spec endpoint
 """
 
-from multiprocessing import Process, Queue
 import sys
-from flask import Flask, request, jsonify
-from flask_swagger import swagger
+from multiprocessing import Process, Queue
 
-from db import session, engine
+""" from flask import Flask, request, jsonify
+    from flask_swagger import swagger
+"""
+from python_code_challenge.database import session, engine
 from base import Base, Command
-from command_parser import get_valid_commands, process_command_output
+from python_code_challenge.api.command.command_parser import get_valid_commands, process_command_output
 
 app = Flask(__name__)
 

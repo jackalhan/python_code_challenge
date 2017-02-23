@@ -33,5 +33,5 @@ style: venv
 # due to a bug with flaskswagger, going to write out to an output dir
 # and then redirect that to the screen. Otherwise it prints
 # the swagger twice
-swagger: venv
-	@. $(ACTIVATE); flaskswagger main:app --out-dir . && cat swagger.json && echo && rm swagger.json
+# swagger: venv
+#	@. $(ACTIVATE); flaskswagger main:app --out-dir . && cat swagger.json && echo && rm swagger.json
