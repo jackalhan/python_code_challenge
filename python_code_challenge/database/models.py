@@ -1,7 +1,7 @@
 from python_code_challenge.database import db
 
 class Command(db.Model):
-    __tablename__ = 'commands'
+    #__tablename__ = 'commands'
     id = db.Column(db.Integer, primary_key=True)
     # store file name to identify where the command is located.
     # file name is concatenated with the timestamp.

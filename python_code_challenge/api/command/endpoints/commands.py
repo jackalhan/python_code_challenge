@@ -3,38 +3,39 @@ import logging
 from flask import request
 from flask_restplus import Resource
 from python_code_challenge.api.command.business import create_command, delete_command, update_command
+from python_code_challenge.api.command.serializers import command
 from python_code_challenge.api.restplus import api
 from python_code_challenge.database.models import Command
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('commands', description='Command Operations')
+ns = api.namespace('command/commands', description='Command Operations')
 
 
 @ns.route('/')
 class CommandCollection(Resource):
-    @api.marshal_list_with(Command)
+    @api.marshal_list_with(command)
     def get(self):
         """
-        Returns list of blog categories.
+        Returns list of commands.
         """
         commands = Command.query.all()
         return commands
 
     @api.response(201, 'Command successfully created.')
-    @api.expect(Command)
+    @api.expect(command)
     def post(self):
         """
-        Creates a new blog category.
+        Creates a new category.
         """
         data = request.json
         create_command(data)
         return None, 201
 
-
+#
 # @ns.route('/<int:id>')
 # @api.response(404, 'Category not found.')
-# class CategoryItem(Resource):
+# class CommandItem(Resource):
 #     @api.marshal_with(category_with_posts)
 #     def get(self, id):
 #         """
