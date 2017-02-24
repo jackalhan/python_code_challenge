@@ -3,7 +3,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///commands.sqlite'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask
-FLASK_SERVER_NAME = 'localhost:8080'
+FLASK_SERVER_NAME = 'localhost:8081'
 FLASK_DEBUG = True  # It must set to false in Production mode.
 
 # Flask-Restplus

@@ -17,8 +17,8 @@ $(ACTIVATE): requirements.txt
 	@touch $(ACTIVATE)
 
 run: venv
-	@echo "Running (on port 8080)..."
-	$(VIRTUALENV_DIR)/bin/python main.py
+	@echo "Running (on port 8081)..."
+	$(VIRTUALENV_DIR)/bin/python python_code_challenge/app.py
 
 clean_pyc:
 	@-find . -name '*.py[co]' -exec rm {} \;
