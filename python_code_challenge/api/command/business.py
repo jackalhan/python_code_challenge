@@ -18,7 +18,7 @@ def create_command(data):
     db.session.commit()
 
 
-def update_category(command_id, data):
+def update_command(command_id, data):
     command = Command.query.filter(Command.id == command_id).one()
     command.file_name = data.get('file_name')
     command.command_string = data.get('command_string')
@@ -29,7 +29,7 @@ def update_category(command_id, data):
     db.session.commit()
 
 
-def delete_category(command_id):
+def delete_command(command_id):
     command = Command.query.filter(Command.id == command_id).one()
     db.session.delete(command)
     db.session.commit()
