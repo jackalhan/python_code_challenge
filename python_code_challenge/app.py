@@ -3,11 +3,12 @@ import logging.config
 from flask import Flask, Blueprint
 from python_code_challenge import settings
 from python_code_challenge.api.command.endpoints.commands import ns as commands_namespace
+from python_code_challenge.api.command.endpoints.database import ns as database_namespace
 from python_code_challenge.api.restplus import api
 from python_code_challenge.database import db
 
 app = Flask(__name__)
-logging.config.fileConfig('logging.conf')
+#logging.config.fileConfig('logging.conf')
 log = logging.getLogger(__name__)
 
 
@@ -19,6 +20,7 @@ def configure_app(flask_app):
     flask_app.config['RESTPLUS_VALIDATE'] = settings.RESTPLUS_VALIDATE
     flask_app.config['RESTPLUS_MASK_SWAGGER'] = settings.RESTPLUS_MASK_SWAGGER
     flask_app.config['ERROR_404_HELP'] = settings.RESTPLUS_ERROR_404_HELP
+    flask_app.config['CREATE_DB_STARTUP'] = settings.CREATE_DB_STARTUP
 
 
 def initialize_app(flask_app):
@@ -27,10 +29,10 @@ def initialize_app(flask_app):
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(blueprint)
     api.add_namespace(commands_namespace)
+    api.add_namespace(database_namespace)
     flask_app.register_blueprint(blueprint)
-
+    #if settings.CREATE_DB_STARTUP:
     db.init_app(flask_app)
-
 
 def main():
     initialize_app(app)

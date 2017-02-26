@@ -14,6 +14,7 @@ def create_command(data):
     if command_id:
         command.id = command_id
 
+
     db.session.add(command)
     db.session.commit()
 

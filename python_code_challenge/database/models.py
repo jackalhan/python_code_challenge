@@ -1,7 +1,7 @@
 from python_code_challenge.database import db
 
 class Command(db.Model):
-    #__tablename__ = 'commands'
+    __tablename__ = 'commands'
     id = db.Column(db.Integer, primary_key=True)
     # store file name to identify where the command is located.
     # file name is concatenated with the timestamp.
@@ -23,6 +23,6 @@ class Command(db.Model):
         self.output = output
 
     def __repr__(self):
-        return "<Command(file_name='%s', string='%s', length='%d', duration='%d', output='%s'>" % (
+        return "<Command (file_name='%s', string='%s', length='%d', duration='%d', output='%s'>" % (
         self.file_name, self.command_string, self.length, self.duration, self.output)
 

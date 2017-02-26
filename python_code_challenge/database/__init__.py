@@ -1,10 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+app = db
+def create_all() :
+    with app.app_context():
+        db.create_all()
 
-
-def reset_database():
-    from python_code_challenge.database.models import Command
-    db.drop_all()
-    db.create_all()
-
+def drop_all() :
+    with app.app_context():
+        db.drop_all()
