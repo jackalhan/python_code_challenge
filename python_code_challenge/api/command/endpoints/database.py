@@ -6,11 +6,11 @@ from python_code_challenge.database import db
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('command/database', description='Database Operation')
+ns = api.namespace('database', description='Database Operation')
 
 
-@ns.route('/')
-class DatabaseItem(Resource):
+@ns.route('/make_db')
+class DatabaseMake(Resource):
     @api.response(200, 'Database successfully created.')
     def post(self):
         """
@@ -24,7 +24,8 @@ class DatabaseItem(Resource):
         db.create_all()
         return 'Database successfully created.', 200
 
-
+@ns.route('/drop_db')
+class DatabaseMake(Resource):
     @api.response(200, 'Database successfully dropped.')
     def delete(self):
         """

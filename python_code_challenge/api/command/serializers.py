@@ -9,3 +9,9 @@ command_serializer = api.model('Command object', {
     'duration': fields.Integer(required=True, description='The time to complete'),
     'output': fields.String(description='The output of the command')
 })
+
+
+command_collection_serializer= api.inherit('Command Collections', {
+    'commands': fields.List(fields.Nested(command_serializer))
+})
+
