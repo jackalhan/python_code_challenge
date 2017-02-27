@@ -6,6 +6,7 @@ from python_code_challenge.api.command.endpoints.commands import ns as commands_
 from python_code_challenge.api.command.endpoints.database import ns as database_namespace
 from python_code_challenge.api.restplus import api
 from python_code_challenge.database import db
+from python_code_challenge.api.command import command_parser
 
 app = Flask(__name__)
 #logging.config.fileConfig('logging.conf')
@@ -33,6 +34,7 @@ def initialize_app(flask_app):
     flask_app.register_blueprint(blueprint)
     #if settings.CREATE_DB_STARTUP:
     db.init_app(flask_app)
+    command_parser.app = flask_app
 
 def main():
     initialize_app(app)

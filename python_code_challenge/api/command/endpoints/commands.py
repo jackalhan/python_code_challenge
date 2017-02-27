@@ -1,17 +1,20 @@
 import logging
 
-from flask import json
+
+from flask import request
+
 from flask_restplus import Resource
+from multiprocessing import Queue, Process
 
 from python_code_challenge.api.command.business import create_command, delete_command, update_command
-from python_code_challenge.api.command.parsers import pagination_arguments
-from python_code_challenge.api.command.serializers import command_serializer, command_collection_serializer
+from python_code_challenge.api.command.command_parser import get_valid_commands, process_command_output
+from python_code_challenge.api.command.serializers import command_serializer, file_serializer
 from python_code_challenge.api.restplus import api
 from python_code_challenge.database.models import Command
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('/', description='Command Operations')
+ns = api.namespace('commands', description='Command Operations')
 
 """
 @ns.route('/')
@@ -43,11 +46,12 @@ class CommandItem(Resource):
             description = 'Command is already exist in database with the following fields : [File Name = ' + data.get('file_name') + ', Command = ' + data.get('command_string') + ']'
         return description, code
 """
-@ns.route('/get_command_output')
-@api.response(400, 'Commands not found.')
+@ns.route('/')
+@api.response(200, 'Commands returned OK')
 class CommandCollection(Resource):
 
-    @api.marshal_with(command_collection_serializer)
+    @api.response(400, 'Commands not found.')
+    @api.marshal_with(command_serializer, envelope='commands')
     def get(self):
         """
         Returns as json the all stored commands that have been processed
@@ -60,14 +64,37 @@ class CommandCollection(Resource):
             description: Commands not found
         """
         command_list = Command.query.all()
+        return command_list
 
-        #id = command_list['id']
-       # if not id :
-       #     return 400
-       # else :
-        return json.dumps(command_list)
-
-#
+    @api.expect(file_serializer)
+    def post(self):
+        """
+        Processes commmands from a command list
+        ---
+        tags: [commands]
+        parameters:
+          - name: filename
+            in: formData
+            description: filename of the commands text file to parse
+                         which exists on the server
+            required: true
+            type: string
+        responses:
+          200:
+            description: Processing OK
+        """
+        parameters = request.json
+        filename = parameters.get('filename')
+        queue = Queue()
+        get_valid_commands(queue, filename)
+        processes = [Process(target=process_command_output, args=(queue,))
+                     for num in range(2)]
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+        return 'Successfully processed commands.'
+        #
 # @ns.route('/<int:id>')
 # @api.response(404, 'Command not found.')
 # class CommandItem(Resource):

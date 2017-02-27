@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 ns = api.namespace('database', description='Database Operation')
 
 
-@ns.route('/make_db')
+@ns.route('/')
 class DatabaseMake(Resource):
     @api.response(200, 'Database successfully created.')
     def post(self):
@@ -24,8 +24,6 @@ class DatabaseMake(Resource):
         db.create_all()
         return 'Database successfully created.', 200
 
-@ns.route('/drop_db')
-class DatabaseMake(Resource):
     @api.response(200, 'Database successfully dropped.')
     def delete(self):
         """
