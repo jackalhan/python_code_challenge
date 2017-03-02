@@ -22,3 +22,10 @@ REST :
     - turn Python exceptions into HTTP response
     - minimise boilerplate code
     - generate interactive documentation (Swagger UI)
+
+COMMAND :
+1. virtualenv venv
+2. . venv/bin/activate
+3. pip install -r requirements.txt
+4. configure pycharm for adding venv as an interpreter.
+5, and run main
