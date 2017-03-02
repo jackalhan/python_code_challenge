@@ -3,8 +3,6 @@ Handles the work of validating and processing command input.
 """
 import mmap
 import os
-
-import numpy as np
 import subprocess
 
 import time
@@ -36,9 +34,11 @@ def get_valid_commands(queue, filename):
     infile.close()
 
     allCommandList = removeDuplicatesInList(allCommandList)
-    queue = [x for x in allCommandList if x in validCommandList]
+    #queue = [x for x in allCommandList if x in validCommandList]
+    for x in allCommandList :
+        if x in validCommandList :
+            queue.put(x)
 
-    #queue.put()
 
 
 
@@ -49,16 +49,16 @@ def process_command_output(queue, fileName):
     length = len(command_string)
     duration = None
     output = None
-    cmd = subprocess.Popen(command_string, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid, timeout=1)
-    if cmd.stdout == '' :
-        duration = 0
-    else:
-        start = time.time()
-        time.clock()
-        for line in cmd.stdout:
-            output = output + line
 
-        duration = time.time() - start
+    start = time.time()
+    time.clock()
+    cmd = subprocess.Popen(command_string, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid).communicate()[0]
+    duration = time.time() - start
+    print cmd
+
+    # for line in cmd.stdout:
+    #     output += str(line)
+
     command = Command(fileName, command_string, length, duration, output)
     create_command(command)
 
