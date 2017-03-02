@@ -8,6 +8,7 @@ import subprocess
 import time
 
 from python_code_challenge.api.command.business import create_command
+from python_code_challenge.api.command.command_runner import RunCmd
 from python_code_challenge.database.models import Command
 
 app = None
@@ -45,22 +46,23 @@ def get_valid_commands(queue, filename):
 def process_command_output(queue, fileName):
     # TODO: run the command and put its data in the db
 
-    command_string = queue.get()
-    length = len(command_string)
-    duration = None
-    output = None
+    while not queue.empty():
+        command_string = queue.get()
+        length = len(command_string)
+        start = time.time()
+        time.clock()
+        #output = subprocess.Popen(command_string, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid).communicate()[0]
+        output, isTerminated = RunCmd(command_string, 60).execute()
+        duration = time.time() - start
+        if isTerminated == True:
+            duration = 0
+            output = None
 
-    start = time.time()
-    time.clock()
-    cmd = subprocess.Popen(command_string, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid).communicate()[0]
-    duration = time.time() - start
-    print cmd
+        # for line in cmd.stdout:
+        #     output += str(line)
 
-    # for line in cmd.stdout:
-    #     output += str(line)
-
-    command = Command(fileName, command_string, length, duration, output)
-    create_command(command)
+        command = Command(fileName, command_string, length, round(duration), output)
+        create_command(command)
 
 def uniqify(seq, idfun=None):
     seen = set()

@@ -11,13 +11,12 @@ def create_command(data):
     output = data.get('output')
 
     command = Command(file_name, command_string, length, duration, output)
-    if command_id:
-        command.id = command_id
+    create_command(command)
 
+def create_command(command) :
 
     db.session.add(command)
     db.session.commit()
-
 
 def update_command(command_id, data):
     command = Command.query.filter(Command.id == command_id).one()

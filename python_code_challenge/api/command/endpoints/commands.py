@@ -87,7 +87,7 @@ class CommandCollection(Resource):
         filename = parameters.get('filename')
         queue = Queue()
         get_valid_commands(queue, filename)
-        processes = [Process(target=process_command_output, args=(queue,'filename',))
+        processes = [Process(target=process_command_output, args=(queue,filename,))
                      for num in range(2)]
         for process in processes:
             process.start()
