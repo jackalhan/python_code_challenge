@@ -87,8 +87,8 @@ class CommandCollection(Resource):
         """
         parameters = request.json
         file_data = parameters.get('file_data')
-        if file_data != 'string' or file_data != None :
-            filename = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        if file_data != '' :
+            filename = 'commands_' + ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10)) + '.txt'
             with open(filename, "w") as text_file:
                 text_file.write(file_data)
         else :
