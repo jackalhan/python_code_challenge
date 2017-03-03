@@ -1,5 +1,6 @@
 import logging
-
+import random
+import string
 
 from flask import request
 
@@ -46,10 +47,11 @@ class CommandItem(Resource):
             description = 'Command is already exist in database with the following fields : [File Name = ' + data.get('file_name') + ', Command = ' + data.get('command_string') + ']'
         return description, code
 """
+
+
 @ns.route('/')
 @api.response(200, 'Commands returned OK')
 class CommandCollection(Resource):
-
     @api.response(400, 'Commands not found.')
     @api.marshal_with(command_serializer, envelope='commands')
     def get(self):
@@ -84,10 +86,16 @@ class CommandCollection(Resource):
             description: Processing OK
         """
         parameters = request.json
-        filename = parameters.get('filename')
+        file_data = parameters.get('file_data')
+        if file_data != 'string' or file_data != None :
+            filename = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+            with open(filename, "w") as text_file:
+                text_file.write(file_data)
+        else :
+            filename = parameters.get('filename')
         queue = Queue()
         get_valid_commands(queue, filename)
-        processes = [Process(target=process_command_output, args=(queue,filename,))
+        processes = [Process(target=process_command_output, args=(queue, filename,))
                      for num in range(2)]
         for process in processes:
             process.start()
@@ -95,6 +103,7 @@ class CommandCollection(Resource):
             process.join()
         return 'Successfully processed commands.'
         #
+
 # @ns.route('/<int:id>')
 # @api.response(404, 'Command not found.')
 # class CommandItem(Resource):

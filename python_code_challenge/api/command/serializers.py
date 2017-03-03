@@ -11,7 +11,8 @@ command_serializer = api.model('Command object', {
 })
 
 file_serializer = api.model('File input object', {
-    'filename': fields.String(readOnly=True, description='Filename of the commands text file to parse which exists on the server (Filename should be posted with the extension.)', required=True)
+    'filename': fields.String(readOnly=True, description='Filename of the commands text file to parse which exists on the server (Filename should be posted with the extension.)'),
+    'file_data': fields.String(description=' Use this "file_data" instead of the "filename" argument (if present) to process the commands. )', )
 })
 
 command_collection_serializer= api.model('Command Collections', {

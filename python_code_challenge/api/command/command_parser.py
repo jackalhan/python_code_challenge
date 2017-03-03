@@ -21,6 +21,11 @@ def get_valid_commands(queue, filename):
     isAllCommandLine = None
     with open(filename) as infile:
         map = mmap.mmap(infile.fileno(), 0, prot=mmap.PROT_READ)
+        ''' BEGIN : For processing large files '''
+        # chunkSize = 1000
+        # for i in xrange(0, len(infile), chunkSize):
+        #     with open(filename + 'file_' + str(i // chunkSize) + '.txt', 'w') as outfile:        #
+        ''' END : For processing large files '''
         for line in iter(map.readline, ""):
             if line.strip() == '[COMMAND LIST]':
                 isAllCommandLine = True
